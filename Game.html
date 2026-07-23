@@ -3,803 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBERVECTOR 2088 // Quantum Neural Workspace</title>
-    
-    <!-- Google Fonts for Retro-Futuristic Typography -->
+    <title>ZARA — Official Online Store</title>
+    <!-- Google Fonts for Minimal Editorial Look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* --- RETRO-FUTURISTIC SYSTEM VARIABLES --- */
+        /* --- CSS RESET & ZARA DESIGN SYSTEM --- */
         :root {
-            --neon-pink: #ff007f;
-            --neon-cyan: #00f3ff;
-            --neon-purple: #9d00ff;
-            --neon-yellow: #ffe600;
-            --space-black: #060212;
-            --grid-line: rgba(0, 243, 255, 0.25);
-            --chrome-grad: linear-gradient(180deg, #ffffff 0%, #90a0b0 45%, #000000 50%, #e0f0ff 55%, #305070 100%);
-            --font-head: 'Orbitron', sans-serif;
-            --font-mono: 'Share Tech Mono', monospace;
-            --font-pixel: 'VT323', monospace;
+            --black: #000000;
+            --white: #ffffff;
+            --gray-light: #f4f4f4;
+            --gray-muted: #888888;
+            --font-editorial: 'Bodoni Moda', serif;
+            --font-sans: 'Inter', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* --- GLOBAL RESET & BASE STYLES --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--space-black);
-            color: #d1f7ff;
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
+            background-color: var(--white);
+            color: var(--black);
             overflow-x: hidden;
-            position: relative;
-            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- CRT SCANLINE & CURVATURE OVERLAY --- */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 999;
-            background-size: 100% 4px, 6px 100%;
-            pointer-events: none;
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        /* --- BACKGROUND VECTOR CANVAS & SUN --- */
-        #bg-canvas {
+        /* --- STICKY NAVIGATION BAR --- */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -2;
-        }
-
-        .synth-sun {
-            position: fixed;
-            top: 25vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            background: linear-gradient(180deg, #ffe600 0%, #ff007f 80%);
-            box-shadow: 0 0 80px rgba(255, 0, 127, 0.6), 0 0 160px rgba(255, 230, 0, 0.3);
-            z-index: -1;
-            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%, 0 53%, 100% 53%, 100% 58%, 0 58%, 0 63%, 100% 63%, 100% 70%, 0 70%, 0 78%, 100% 78%, 100% 88%, 0 88%, 0 100%, 100% 100%);
-        }
-
-        /* --- TYPOGRAPHY UTILITIES --- */
-        .chrome-text {
-            background: var(--chrome-grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(0, 243, 255, 0.6));
-            font-family: var(--font-head);
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        .neon-glow-pink {
-            color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink), 0 0 80px var(--neon-pink);
-        }
-
-        .neon-glow-cyan {
-            color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
-        }
-
-        /* --- UI COMPONENTS --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* HUD Navbar */
-        header {
-            position: fixed;
-            top: 0;
             width: 100%;
-            z-index: 100;
-            background: rgba(6, 2, 18, 0.85);
-            border-bottom: 2px solid var(--neon-cyan);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        .nav-inner {
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            padding: 0 40px;
+            z-index: 1000;
+            mix-blend-mode: difference;
+            color: var(--white);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
         }
 
         .logo {
-            font-family: var(--font-head);
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--neon-pink);
-            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 32px;
-        }
-
-        .nav-links a {
-            color: #a0d8ef;
-            text-decoration: none;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--neon-yellow);
-            text-shadow: 0 0 8px var(--neon-yellow);
-        }
-
-        .btn-vector {
-            position: relative;
-            padding: 12px 28px;
-            font-family: var(--font-head);
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--space-black);
-            background: var(--neon-cyan);
-            border: none;
-            clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
+            font-family: var(--font-editorial);
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -3px;
             text-transform: uppercase;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
         }
 
-        .btn-vector:hover {
-            background: var(--neon-pink);
-            color: #ffffff;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.8);
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 100vh;
-            padding-top: 140px;
+        .nav-right {
             display: flex;
-            align-items: center;
+            gap: 25px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
             position: relative;
-            text-align: center;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: currentColor;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* --- HERO EDITORIAL SLIDER --- */
+        .hero {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 60px 40px;
+        }
+
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
         }
 
         .hero-content {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: relative;
+            z-index: 10;
+            color: var(--white);
+            max-width: 600px;
         }
 
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 16px;
-            border: 1px solid var(--neon-pink);
-            background: rgba(255, 0, 127, 0.1);
-            color: var(--neon-pink);
-            font-size: 0.85rem;
+        .hero-tag {
+            font-size: 0.75rem;
             letter-spacing: 2px;
-            margin-bottom: 24px;
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
-        }
-
-        .blink-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--neon-pink);
-            border-radius: 50%;
-            animation: pulse 1s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.2; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1.2); }
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            line-height: 1.05;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 680px;
-            color: #b0e0f8;
-            margin-bottom: 40px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.8);
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .btn-secondary-glow {
-            padding: 12px 28px;
-            font-family: var(--font-head);
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--neon-cyan);
-            background: transparent;
-            border: 1px solid var(--neon-cyan);
-            clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
             text-transform: uppercase;
+            margin-bottom: 10px;
+            opacity: 0.9;
         }
 
-        .btn-secondary-glow:hover {
-            background: rgba(0, 243, 255, 0.15);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
-            color: #ffffff;
+        .hero-title {
+            font-family: var(--font-editorial);
+            font-size: 4rem;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 25px;
+            font-style: italic;
         }
 
-        /* --- PANELS & CARDS (Retro Chassis Design) --- */
-        .retro-panel {
-            background: rgba(12, 6, 32, 0.85);
-            border: 1px solid var(--neon-purple);
-            position: relative;
-            padding: 32px;
-            backdrop-filter: blur(8px);
-            box-shadow: inset 0 0 15px rgba(157, 0, 255, 0.2), 0 0 25px rgba(0, 0, 0, 0.8);
+        .cta-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--white);
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: var(--transition);
         }
 
-        .retro-panel::before {
-            content: "";
-            position: absolute;
-            top: -1px; left: 20px; right: 20px;
-            height: 2px;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 10px var(--neon-cyan);
+        .cta-btn:hover {
+            background-color: var(--white);
+            color: var(--black);
         }
 
-        .corner-accent {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border: 2px solid var(--neon-yellow);
+        /* --- CATEGORIES GRID --- */
+        .categories {
+            padding: 100px 40px;
         }
-        .top-left { top: 4px; left: 4px; border-right: none; border-bottom: none; }
-        .top-right { top: 4px; right: 4px; border-left: none; border-bottom: none; }
-        .bottom-left { bottom: 4px; left: 4px; border-right: none; border-top: none; }
-        .bottom-right { bottom: 4px; right: 4px; border-left: none; border-top: none; }
 
-        /* --- FEATURES SECTION --- */
-        .features-section {
-            padding: 120px 0;
-            position: relative;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
         }
 
         .section-title {
-            text-align: center;
-            margin-bottom: 60px;
+            font-family: var(--font-editorial);
+            font-size: 2.5rem;
+            font-weight: 400;
         }
 
-        .section-title h2 {
-            font-size: 2.8rem;
-            letter-spacing: 3px;
-        }
-
-        .section-title p {
-            color: var(--neon-cyan);
-            letter-spacing: 2px;
-            font-size: 0.95rem;
-            margin-top: 8px;
-        }
-
-        .grid-3 {
+        .category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 32px;
-        }
-
-        .feature-card h3 {
-            font-family: var(--font-head);
-            font-size: 1.3rem;
-            color: var(--neon-yellow);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feature-card p {
-            color: #b0c8e0;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .vector-icon {
-            font-size: 1.8rem;
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        /* --- INTERACTIVE NEURAL SYNTH HUD --- */
-        .interactive-section {
-            padding: 80px 0 120px;
-        }
-
-        .synth-hud {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        @media (max-width: 868px) {
-            .synth-hud { grid-template-columns: 1fr; }
-        }
-
-        .hud-display {
-            background: #000;
-            border: 2px solid var(--neon-cyan);
-            border-radius: 4px;
-            padding: 24px;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-            font-family: var(--font-pixel);
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .hud-header {
-            display: flex;
-            justify-content: space-between;
-            color: var(--neon-yellow);
-            font-size: 1.2rem;
-            border-bottom: 1px dashed var(--neon-cyan);
-            padding-bottom: 8px;
-        }
-
-        .wave-visualizer {
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 120px;
-            padding: 20px 0;
-        }
-
-        .wave-bar {
-            flex: 1;
-            background: var(--neon-pink);
-            box-shadow: 0 0 8px var(--neon-pink);
-            height: 20%;
-            transition: height 0.1s ease;
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .control-group label {
-            display: block;
-            font-family: var(--font-head);
-            font-size: 0.85rem;
-            color: var(--neon-cyan);
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .retro-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            background: #100826;
-            outline: none;
-            border: 1px solid var(--neon-purple);
-            box-shadow: inset 0 0 5px #000;
-        }
-
-        .retro-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--neon-yellow);
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--neon-yellow);
-            border: 2px solid #000;
-        }
-
-        /* --- STATS COUNTER STRIP --- */
-        .stats-strip {
-            background: linear-gradient(90deg, rgba(255, 0, 127, 0.2) 0%, rgba(0, 243, 255, 0.2) 100%);
-            border-top: 1px solid var(--neon-pink);
-            border-bottom: 1px solid var(--neon-cyan);
-            padding: 40px 0;
-            margin: 40px 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            text-align: center;
         }
 
-        .stat-number {
-            font-family: var(--font-head);
-            font-size: 2.8rem;
-            color: #fff;
-            text-shadow: 0 0 15px var(--neon-cyan);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--neon-yellow);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* --- CALL TO ACTION (THE LAUNCHPAD) --- */
-        .cta-section {
-            padding: 120px 0;
-            text-align: center;
+        .category-card {
             position: relative;
+            height: 520px;
+            overflow: hidden;
+            background-color: var(--gray-light);
         }
 
-        .cta-panel {
-            background: radial-gradient(circle at center, rgba(30, 8, 60, 0.9) 0%, rgba(6, 2, 18, 0.95) 100%);
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 50px rgba(255, 0, 127, 0.4);
-            padding: 60px 32px;
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .cta-panel h2 {
-            font-size: 3rem;
-            margin-bottom: 16px;
+        .category-card:hover img {
+            transform: scale(1.05);
         }
 
-        .cta-panel p {
-            max-width: 600px;
-            margin: 0 auto 36px;
-            color: #d0e8f8;
-            font-size: 1.1rem;
+        .category-info {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            color: var(--white);
+            z-index: 5;
+        }
+
+        .category-name {
+            font-size: 1.5rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
 
         /* --- FOOTER --- */
         footer {
-            border-top: 1px solid rgba(0, 243, 255, 0.2);
-            padding: 40px 0;
-            background: #03010a;
-            font-size: 0.85rem;
-            color: #6080a0;
+            padding: 80px 40px 40px;
+            background-color: var(--white);
+            border-top: 1px solid var(--gray-light);
         }
 
-        .footer-inner {
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            font-size: 0.8rem;
+            color: var(--gray-muted);
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--black);
+        }
+
+        .footer-bottom {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
+            font-size: 0.75rem;
+            color: var(--gray-muted);
         }
 
-        /* Responsive Tweaks */
+        /* --- RESPONSIVE ADJUSTMENTS --- */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.8rem; }
-            .nav-links { display: none; }
-            .hero-actions { flex-direction: column; width: 100%; }
-            .btn-vector, .btn-secondary-glow { width: 100%; text-align: center; }
+            .navbar { padding: 0 20px; }
+            .logo { font-size: 2rem; }
+            .hero-title { font-size: 2.8rem; }
+            .categories { padding: 60px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PERSPECTIVE VECTOR CANVAS BACKGROUND -->
-    <canvas id="bg-canvas"></canvas>
-    <div class="synth-sun"></div>
+    <!-- STICKY TOP NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="menu-btn">MENU</button>
+            <a href="index.html" class="logo">ZARA</a>
+        </div>
 
-    <!-- HUD NAVBAR -->
-    <header>
-        <div class="container nav-inner">
-            <a href="#" class="logo chrome-text">
-                <div class="logo-icon"></div>
-                CYBERVECTOR
+        <div class="nav-right">
+            <a href="catalog.html" class="nav-link">SEARCH</a>
+            <a href="#" class="nav-link">LOG IN</a>
+            <a href="cart.html" class="nav-link">HELP</a>
+            <a href="#" class="nav-link">SHOPPING BAG (0)</a>
+        </div>
+    </nav>
+
+    <!-- HERO CAMPAIGN SECTION -->
+    <section class="hero">
+        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=80');">
+            <div class="hero-content">
+                <p class="hero-tag">NEW COLLECTION / AUTUMN 2026</p>
+                <h1 class="hero-title">Minimalist Tailoring & Outerwear</h1>
+                <a href="catalog.html" class="cta-btn">View Collection</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED CATEGORIES -->
+    <section class="categories">
+        <div class="section-header">
+            <h2 class="section-title">Explore Categories</h2>
+            <a href="catalog.html" style="font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600;">View All →</a>
+        </div>
+
+        <div class="category-grid">
+            <a href="catalog.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80" alt="WOMAN">
+                <div class="category-info">
+                    <h3 class="category-name">WOMAN</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.8;">NEW ARRIVALS</p>
+                </div>
             </a>
-            <ul class="nav-links">
-                <li><a href="#features">// SYSTEM SPEC</a></li>
-                <li><a href="#hud">// QUANTUM HUD</a></li>
-                <li><a href="#cta">// INITIATE</a></li>
-            </ul>
-            <a href="#cta" class="btn-vector">LAUNCH CONSOLE</a>
+
+            <a href="catalog.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80" alt="MAN">
+                <div class="category-info">
+                    <h3 class="category-name">MAN</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.8;">EDITORIAL SELECTION</p>
+                </div>
+            </a>
+
+            <a href="catalog.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80" alt="KIDS">
+                <div class="category-info">
+                    <h3 class="category-name">KIDS</h3>
+                    <p style="font-size: 0.8rem; opacity: 0.8;">BACK TO SCHOOL</p>
+                </div>
+            </a>
         </div>
-    </header>
-
-    <!-- MAIN ONE-PAGE CONTAINER -->
-    <main>
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="container hero-content">
-                <div class="status-badge">
-                    <span class="blink-dot"></span> NEURAL LINK: ONLINE 2088
-                </div>
-                <h1 class="chrome-text">QUANTUM NEURAL<br><span class="neon-glow-pink">SYNTHESIS</span></h1>
-                <p>Plug direct into the 80s dreamscape of tomorrow. Process, modulate, and visualize real-time high-density vector streams with zero latency.</p>
-                <div class="hero-actions">
-                    <a href="#cta" class="btn-vector">START FREE TRIAL</a>
-                    <a href="#hud" class="btn-secondary-glow">EXPLORE DEMO</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- STATS STRIP -->
-        <div class="stats-strip">
-            <div class="container stats-grid">
-                <div>
-                    <div class="stat-number neon-glow-cyan" id="stat-1">1.21</div>
-                    <div class="stat-label">GIGAWATTS POWER</div>
-                </div>
-                <div>
-                    <div class="stat-number neon-glow-pink">60 FPS</div>
-                    <div class="stat-label">VECTOR REFRESH</div>
-                </div>
-                <div>
-                    <div class="stat-number neon-glow-cyan">0.01ms</div>
-                    <div class="stat-label">NEURAL LATENCY</div>
-                </div>
-                <div>
-                    <div class="stat-number neon-glow-pink">100%</div>
-                    <div class="stat-label">SYNTHWAVE ENERGY</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FEATURES SECTION -->
-        <section class="features-section" id="features">
-            <div class="container">
-                <div class="section-title">
-                    <h2 class="chrome-text">SYSTEM CAPABILITIES</h2>
-                    <p>// ENGINEERED FOR THE CYBERNETIC FRONTIER</p>
-                </div>
-
-                <div class="grid-3">
-                    <div class="retro-panel feature-card">
-                        <div class="corner-accent top-left"></div>
-                        <div class="corner-accent top-right"></div>
-                        <div class="corner-accent bottom-left"></div>
-                        <div class="corner-accent bottom-right"></div>
-                        <h3><span class="vector-icon">❖</span> VECTOR PIPELINE</h3>
-                        <p>Hardware-accelerated grid rendering directly off the neural-bus. Transform complex data into ultra-crisp geometric laser matrices instantly.</p>
-                    </div>
-
-                    <div class="retro-panel feature-card">
-                        <div class="corner-accent top-left"></div>
-                        <div class="corner-accent top-right"></div>
-                        <div class="corner-accent bottom-left"></div>
-                        <div class="corner-accent bottom-right"></div>
-                        <h3><span class="vector-icon">⚡</span> CHROMATIC DRIVE</h3>
-                        <p>Infuse your digital workflow with customizable neon palettes, phosphor decay, and analog CRT curvature filters for refined visual comfort.</p>
-                    </div>
-
-                    <div class="retro-panel feature-card">
-                        <div class="corner-accent top-left"></div>
-                        <div class="corner-accent top-right"></div>
-                        <div class="corner-accent bottom-left"></div>
-                        <div class="corner-accent bottom-right"></div>
-                        <h3><span class="vector-icon">▲</span> QUANTUM MATRIX</h3>
-                        <p>Seamless cloud-link sync across all terminal nodes. Work in isolation or synthesize live streams with team pilots worldwide.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- INTERACTIVE HUD DEMO SECTION -->
-        <section class="interactive-section" id="hud">
-            <div class="container">
-                <div class="retro-panel">
-                    <div class="corner-accent top-left"></div>
-                    <div class="corner-accent top-right"></div>
-                    <div class="corner-accent bottom-left"></div>
-                    <div class="corner-accent bottom-right"></div>
-
-                    <div class="synth-hud">
-                        <div>
-                            <h2 class="chrome-text" style="font-size: 2rem; margin-bottom: 12px;">NEURAL FREQUENCY HUD</h2>
-                            <p style="color: #a0c0e0; margin-bottom: 24px;">Adjust real-time harmonic sliders to calibrate the synthwave engine visualizer output.</p>
-                            
-                            <div class="control-group">
-                                <label>CYBER FREQUENCY: <span id="freq-val" style="color:var(--neon-yellow)">88.4 MHz</span></label>
-                                <input type="range" class="retro-slider" id="slider-freq" min="50" max="120" value="88">
-                            </div>
-
-                            <div class="control-group">
-                                <label>VECTOR AMP GAIN: <span id="gain-val" style="color:var(--neon-pink)">75%</span></label>
-                                <input type="range" class="retro-slider" id="slider-gain" min="10" max="100" value="75">
-                            </div>
-                        </div>
-
-                        <div class="hud-display">
-                            <div class="hud-header">
-                                <span>[TERMINAL_MONITOR_01]</span>
-                                <span>STATUS: ACTIVE</span>
-                            </div>
-                            <div class="wave-visualizer" id="wave-visualizer">
-                                <!-- Generated JS bars -->
-                            </div>
-                            <div style="color: var(--neon-cyan); font-size: 0.9rem; text-shadow: 0 0 5px var(--neon-cyan);">
-                                > OVERDRIVE SIGNAL STABLE.<br>
-                                > READY TO JACK-IN...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CALL TO ACTION (THE LAUNCHPAD) -->
-        <section class="cta-section" id="cta">
-            <div class="container">
-                <div class="retro-panel cta-panel">
-                    <div class="corner-accent top-left"></div>
-                    <div class="corner-accent top-right"></div>
-                    <div class="corner-accent bottom-left"></div>
-                    <div class="corner-accent bottom-right"></div>
-
-                    <h2 class="chrome-text">READY FOR THE NEXT FRONTIER?</h2>
-                    <p>Enter your neural operator tag to secure early access to the CYBERVECTOR 2088 mainframe terminal.</p>
-                    
-                    <form onsubmit="event.preventDefault(); alert('ACCESS GRANTED. Welcome to 2088.');" style="display: flex; gap: 10px; justify-content: center; max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
-                        <input type="text" placeholder="OPERATOR_NAME@NET" required style="flex: 1; min-width: 240px; padding: 14px; background: #000; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); font-family: var(--font-mono); outline: none;">
-                        <button type="submit" class="btn-vector">INITIATE LINK</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
+    </section>
 
     <!-- FOOTER -->
     <footer>
-        <div class="container footer-inner">
-            <div>
-                © 2088 CYBERVECTOR SYSTEMS INC. ALL RIGHTS RESERVED.
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>HELP</h4>
+                <ul>
+                    <li><a href="#">My Zara Account</a></li>
+                    <li><a href="#">Items and Sizes</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="#">Returns and Refunds</a></li>
+                </ul>
             </div>
-            <div style="letter-spacing: 1px;">
-                SYSTEM: <span style="color: var(--neon-pink);">OPTIMAL</span> | SYSTEM TIME: <span style="color: var(--neon-cyan);" id="system-time">00:00:00</span>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                    <li><a href="#">Pinterest</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
             </div>
+            <div class="footer-col">
+                <h4>COMPANY</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Offices</a></li>
+                    <li><a href="#">Stores</a></li>
+                    <li><a href="#">Work with us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>POLICIES</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Purchase Conditions</a></li>
+                    <li><a href="#">Cookies Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© ZARA 2026. All rights reserved.</p>
+            <p>ENGLISH</p>
         </div>
     </footer>
 
-    <!-- INTERACTIVE ENGINE & VECTOR CANVAS SCRIPT -->
-    <script>
-        // --- PERSPECTIVE VECTOR GRID CANVAS ENGINE ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        let gridOffset = 0;
-
-        function drawGrid() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const horizon = canvas.height * 0.55;
-            const fov = 300;
-            
-            // Draw Starfield Background
-            ctx.fillStyle = '#060212';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Perspective Grid Lines
-            ctx.strokeStyle = 'rgba(0, 243, 255, 0.3)';
-            ctx.lineWidth = 1.5;
-
-            // Longitudinal Lines (Perspective converging to horizon center)
-            const centerX = canvas.width / 2;
-            const numLines = 30;
-            for (let i = -numLines; i <= numLines; i++) {
-                const x = centerX + i * 40;
-                ctx.beginPath();
-                ctx.moveTo(centerX + (i * 2), horizon);
-                ctx.lineTo(x + (i * 25), canvas.height);
-                ctx.stroke();
-            }
-
-            // Transverse Lines (Moving towards viewer)
-            gridOffset = (gridOffset + 1.2) % 40;
-            for (let y = horizon; y < canvas.height; y += (y - horizon) * 0.15 + 2) {
-                const drawY = y + (gridOffset * ((y - horizon) / canvas.height));
-                if(drawY > horizon && drawY < canvas.height) {
-                    ctx.strokeStyle = `rgba(255, 0, 127, ${((drawY - horizon) / (canvas.height - horizon)) * 0.6})`;
-                    ctx.beginPath();
-                    ctx.moveTo(0, drawY);
-                    ctx.lineTo(canvas.width, drawY);
-                    ctx.stroke();
-                }
-            }
-
-            requestAnimationFrame(drawGrid);
-        }
-        drawGrid();
-
-        // --- INTERACTIVE HUD WAVE VISUALIZER ---
-        const visualizerContainer = document.getElementById('wave-visualizer');
-        const numBars = 24;
-        const bars = [];
-
-        for (let i = 0; i < numBars; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'wave-bar';
-            visualizerContainer.appendChild(bar);
-            bars.push(bar);
-        }
-
-        const sliderFreq = document.getElementById('slider-freq');
-        const sliderGain = document.getElementById('slider-gain');
-        const freqVal = document.getElementById('freq-val');
-        const gainVal = document.getElementById('gain-val');
-
-        function updateWave() {
-            const freq = parseFloat(sliderFreq.value);
-            const gain = parseFloat(sliderGain.value) / 100;
-            
-            freqVal.innerText = freq.toFixed(1) + ' MHz';
-            gainVal.innerText = Math.round(gain * 100) + '%';
-
-            const time = Date.now() * 0.005;
-            bars.forEach((bar, index) => {
-                const height = Math.sin(time + index * (freq * 0.005)) * 40 * gain + 50;
-                bar.style.height = `${Math.max(10, height)}%`;
-            });
-        }
-
-        sliderFreq.addEventListener('input', updateWave);
-        sliderGain.addEventListener('input', updateWave);
-        setInterval(updateWave, 30);
-
-        // --- REAL-TIME SYSTEM CLOCK ---
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('system-time').innerText = now.toTimeString().split(' ')[0];
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
 </body>
 </html>
