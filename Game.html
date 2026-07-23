@@ -3,578 +3,590 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Road Rash Classic</title>
+    <title>AETHER-DRIVE // Next-Gen Orbital Transit</title>
+    
+    <!-- Google Fonts: Orbitron & Rajdhani -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* --- RETRO-FUTURISTIC SYSTEM VARIABLES --- */
+        :root {
+            --neon-magenta: #ff007f;
+            --neon-cyan: #00f0ff;
+            --neon-yellow: #ffeb3b;
+            --neon-purple: #8a2be2;
+            --space-black: #070312;
+            --grid-line: rgba(255, 0, 127, 0.35);
+            --font-title: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        /* --- GLOBAL RESETS & BASE --- */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
         }
+
         body {
-            background-color: #111;
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
+            background-color: var(--space-black);
+            color: #ffffff;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 50% 20%, #20003b 0%, var(--space-black) 70%);
         }
-        #game-container {
+
+        /* --- BACKGROUND VECTOR GRID CANVAS --- */
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        .content-layer {
             position: relative;
-            width: 800px;
-            height: 600px;
-            border: 4px solid #444;
-            box-shadow: 0 0 20px rgba(0, 255, 200, 0.2);
-            background: #000;
+            z-index: 2;
         }
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
+
+        /* --- CRT SCANLINE & GLOW OVERLAY --- */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1000;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            opacity: 0.7;
         }
-        #hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+
+        /* --- TYPOGRAPHY UTILITIES --- */
+        .glow-title {
+            font-family: var(--font-title);
+            text-transform: uppercase;
+            font-style: italic;
+            letter-spacing: 3px;
+            text-shadow: 
+                0 0 10px var(--neon-magenta),
+                0 0 20px var(--neon-magenta),
+                0 0 40px var(--neon-purple);
+        }
+
+        .chrome-text {
+            font-family: var(--font-title);
+            text-transform: uppercase;
+            font-weight: 900;
+            background: linear-gradient(180deg, #ffffff 0%, #99aab8 45%, #1f2a38 50%, #ffffff 85%, #768391 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 0px 8px rgba(0, 240, 255, 0.6));
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
             display: flex;
             justify-content: space-between;
-            font-size: 18px;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 2px solid #555;
-            pointer-events: none;
+            align-items: center;
+            padding: 25px 8%;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            background: rgba(7, 3, 18, 0.85);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .bar-container {
-            width: 150px;
-            height: 16px;
-            background: #333;
-            border: 1px solid #777;
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-family: var(--font-title);
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--neon-magenta);
+            text-shadow: 0 0 10px var(--neon-magenta);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-synth {
+            font-family: var(--font-title);
+            text-transform: uppercase;
+            font-weight: 800;
+            padding: 14px 32px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--neon-magenta) 0%, var(--neon-purple) 100%);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-magenta), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            border-radius: 0px;
+            clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
             display: inline-block;
-            vertical-align: middle;
-            margin-left: 5px;
         }
-        .bar {
-            height: 100%;
-            width: 100%;
-            background: #0f0;
-            transition: width 0.1s;
+
+        .btn-synth:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 30px var(--neon-cyan), inset 0 0 20px rgba(255, 255, 255, 0.6);
+            background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-magenta) 100%);
+            color: #000;
         }
-        #game-over {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            z-index: 10;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
         }
-        #game-over button {
-            margin-top: 20px;
-            padding: 10px 25px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            background: #e10600;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .hero-badge {
+            border: 1px solid var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            padding: 6px 16px;
+            font-family: var(--font-title);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
-        #game-over button:hover {
-            background: #ff2a2a;
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            margin-bottom: 20px;
+            line-height: 1.05;
         }
-        .controls-hint {
+
+        .hero p {
+            max-width: 650px;
+            font-size: 1.4rem;
+            color: #d1d5db;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        /* SUN VECTOR DECORATION */
+        .retro-sun {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(180deg, var(--neon-yellow) 0%, var(--neon-magenta) 100%);
+            border-radius: 50%;
             position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 5px 15px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
+            top: 25%;
+            z-index: -1;
+            box-shadow: 0 0 60px var(--neon-magenta);
+            clip-path: polygon(
+                0 0, 100% 0, 100% 50%, 0 50%,
+                0 55%, 100% 55%, 100% 65%, 0 65%,
+                0 70%, 100% 70%, 100% 80%, 0 80%,
+                0 85%, 100% 85%, 100% 100%, 0 100%
+            );
+            opacity: 0.75;
+        }
+
+        /* --- FEATURES SECTION --- */
+        .features {
+            padding: 100px 8%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            margin-top: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .card {
+            background: rgba(15, 8, 38, 0.7);
+            border: 1px solid rgba(255, 0, 127, 0.4);
+            padding: 40px 30px;
+            position: relative;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px;
+            width: 20px; height: 20px;
+            border-top: 3px solid var(--neon-cyan);
+            border-left: 3px solid var(--neon-cyan);
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; right: -2px;
+            width: 20px; height: 20px;
+            border-bottom: 3px solid var(--neon-magenta);
+            border-right: 3px solid var(--neon-magenta);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.25);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .card h3 {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: #b3b9c1;
+            font-size: 1.1rem;
+        }
+
+        /* --- TECH SPECIFICATIONS (HUD STYLE) --- */
+        .specs {
+            padding: 100px 8%;
+            background: linear-gradient(180deg, rgba(7,3,18,0) 0%, rgba(138,43,226,0.15) 50%, rgba(7,3,18,0) 100%);
+        }
+
+        .hud-container {
+            border: 2px solid var(--neon-cyan);
+            background: rgba(5, 2, 15, 0.85);
+            padding: 50px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hud-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .stat-box {
+            border-left: 3px solid var(--neon-magenta);
+            padding-left: 15px;
+        }
+
+        .stat-number {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- CALL TO ACTION --- */
+        .cta-section {
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid var(--neon-magenta);
+            background: rgba(20, 5, 40, 0.9);
+            padding: 60px 30px;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 20px;
+        }
+
+        .cta-box p {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+            margin-bottom: 40px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px 8%;
+            border-top: 1px solid rgba(255, 0, 127, 0.3);
+            text-align: center;
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            color: #717c8d;
+            letter-spacing: 2px;
+            background: #030108;
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 900px) {
+            .hud-container {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <canvas id="canvas" width="800" height="600"></canvas>
-        
-        <!-- HEADS UP DISPLAY -->
-        <div id="hud">
-            <div>SPEED: <span id="speed-val">0</span> MPH</div>
-            <div>DISTANCE: <span id="dist-val">0</span>m</div>
+    <!-- CRT SCANLINE OVERLAY -->
+    <div class="scanlines"></div>
+
+    <!-- RETRO PERSPECTIVE GRID CANVAS -->
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="content-layer">
+
+        <!-- HEADER / NAVIGATION -->
+        <nav>
+            <a href="#" class="logo">AETHER<span>//</span>DRIVE</a>
+            <ul class="nav-links">
+                <li><a href="#about">SYSTEMS</a></li>
+                <li><a href="#specs">TELEMETRY</a></li>
+                <li><a href="#cta">LAUNCH</a></li>
+            </ul>
+            <a href="#cta" class="btn-synth">RESERVE NOW</a>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="retro-sun"></div>
+            <div class="hero-badge">INITIATING VECTOR-LINK // 2086 VISION</div>
+            <h1 class="chrome-text">ORBITAL SPEED.<br><span class="glow-title">SYNTHWAVE SOUL.</span></h1>
+            <p>Experience the world's first hyper-magnetic, laser-vector guided transit network. Designed for the bold pioneers of the next digital frontier.</p>
             <div>
-                HEALTH: 
-                <div class="bar-container">
-                    <div id="health-bar" class="bar"></div>
+                <a href="#cta" class="btn-synth">ENGAGE THRUSTERS</a>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section class="features" id="about">
+            <div class="section-header">
+                <div class="subtitle">// ARCHITECTURE & CAPABILITIES</div>
+                <h2 class="glow-title">ENGINEERED FOR ADVENTURE</h2>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>LIGHT-GRID PROPULSION</h3>
+                    <p>Powered by zero-point magnetic vector rails that suspend vehicles in a frictionless state of perpetual kinetic acceleration.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💎</div>
+                    <h3>CHROME DENSITY FRAME</h3>
+                    <p>Aerodynamic titanium-alloy unibody chassis built to withstand sonic atmospheric transitions effortlessly.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🛰️</div>
+                    <h3>HUD TELEMETRY INTERFACE</h3>
+                    <p>Real-time cybernetic overlay projects navigation vectors directly onto laser-etched polarized windshield matrices.</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="controls-hint">
-            [<b>W/Up</b>] Accelerate | [<b>A/D/Arrows</b>] Steer | [<b>Space</b>] Punch/Attack
-        </div>
+        <!-- SPECIFICATIONS / HUD SECTION -->
+        <section class="specs" id="specs">
+            <div class="container">
+                <div class="hud-container">
+                    <div>
+                        <div class="subtitle" style="margin-bottom: 10px;">SYSTEM STATUS: OPTIMAL</div>
+                        <h2 class="glow-title" style="font-size: 2.2rem; margin-bottom: 20px;">REAL-TIME SPECIFICATIONS</h2>
+                        <p style="font-size: 1.1rem; color: #a2acb9;">Aether-Drive delivers unparalleled kinetic output through synchronized laser arrays and synthetic energy cells designed for high-velocity corridors.</p>
+                    </div>
 
-        <!-- GAME OVER SCREEN -->
-        <div id="game-over" style="display: none;">
-            <h1 id="go-title">WACKED OUT!</h1>
-            <p id="go-msg" style="font-size: 1.2rem; margin-top: 10px; color: #aaa;"></p>
-            <button onclick="resetGame()">PLAY AGAIN</button>
-        </div>
+                    <div class="hud-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">1,200</div>
+                            <div class="stat-label">MPH TOP SPEED</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">0.00</div>
+                            <div class="stat-label">FRICTION COEFFICIENT</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">SYNTHETIC POWER</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">0.2s</div>
+                            <div class="stat-label">RESPONSE LATENCY</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION SECTION -->
+        <section class="cta-section" id="cta">
+            <div class="cta-box">
+                <div class="subtitle" style="margin-bottom: 15px;">THE FUTURE IS CALLING</div>
+                <h2 class="chrome-text">CLAIM YOUR ACCESS PASS</h2>
+                <p>Prepare for launch into the next evolution of personal transit. Secure your position on the vector grid today.</p>
+                <a href="#" class="btn-synth" style="font-size: 1.2rem; padding: 18px 45px;">LAUNCH INTO TOMORROW</a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2086 AETHER-DRIVE INC. // ALL RIGHTS RESERVED // VECTOR SYSTEM V8.6</p>
+        </footer>
+
     </div>
 
+    <!-- CANVAS ANIMATION SCRIPT (ANIMATED RETRO GRID) -->
     <script>
-        const canvas = document.getElementById('canvas');
+        const canvas = document.getElementById('hero-canvas');
         const ctx = canvas.getContext('2d');
 
-        // --- CONSTANTS & CONFIG ---
-        const CANVAS_W = 800;
-        const CANVAS_H = 600;
-        const ROAD_WIDTH = 2000;
-        const SEGMENT_LENGTH = 200;
-        const RUMBLE_LENGTH = 3;
-        const CAMERA_HEIGHT = 1000;
-        const CAMERA_DEPTH = 1 / Math.tan((100 / 2) * Math.PI / 180); // FOV 100
-        const DRAW_DISTANCE = 300;
+        let width, height;
+        let speed = 2;
+        let gridOffset = 0;
 
-        // --- INPUT STATE ---
-        const keys = { up: false, down: false, left: false, right: false, attack: false };
-
-        window.addEventListener('keydown', e => handleKey(e, true));
-        window.addEventListener('keyup', e => handleKey(e, false));
-
-        function handleKey(e, isDown) {
-            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keys.up = isDown;
-            if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = isDown;
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = isDown;
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = isDown;
-            if (e.key === ' ' || e.key === 'Control') keys.attack = isDown;
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
         }
 
-        // --- ROAD SEGMENTS SETUP ---
-        let segments = [];
-        let totalTrackLength = 0;
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function buildRoad() {
-            segments = [];
-            // Build 1500 segments with curves
-            for (let i = 0; i < 1500; i++) {
-                let curve = 0;
-                // Add winding turns
-                if (i > 100 && i < 300) curve = 2;
-                if (i > 400 && i < 600) curve = -3;
-                if (i > 700 && i < 900) curve = 4;
-                if (i > 1000 && i < 1200) curve = -2;
+        function drawGrid() {
+            ctx.clearRect(0, 0, width, height);
 
-                segments.push({
-                    index: i,
-                    p1: { world: { z: i * SEGMENT_LENGTH }, camera: {}, screen: {} },
-                    p2: { world: { z: (i + 1) * SEGMENT_LENGTH }, camera: {}, screen: {} },
-                    curve: curve,
-                    color: Math.floor(i / RUMBLE_LENGTH) % 2 === 0 ? 
-                        { grass: '#107c10', road: '#444444', rumble: '#ffffff', lane: '#ffffff' } :
-                        { grass: '#0e690e', road: '#3b3b3b', rumble: '#e10600', lane: '#3b3b3b' }
-                });
-            }
-            totalTrackLength = segments.length * SEGMENT_LENGTH;
-        }
+            const horizon = height * 0.55;
+            const fov = 300;
 
-        // --- GAME VARIABLES ---
-        let playerX = 0;            // Normalized -1 (left) to 1 (right)
-        let playerZ = 0;            // Distance along track
-        let playerSpeed = 0;        // Current speed
-        const maxSpeed = 12000;     // Top speed
-        const accel = 4000;
-        const decel = 8000;
-        let playerHealth = 100;
-        let attackCooldown = 0;
-        let attackAnimation = 0;
-        let isGameOver = false;
-
-        // Opponents Array
-        let rivals = [];
-
-        function initRivals() {
-            rivals = [
-                { x: -0.4, z: 2000, speed: 7000, color: '#00D2FF', name: 'Viper', health: 50, state: 'normal' },
-                { x: 0.4, z: 5000, speed: 8500, color: '#FFD700', name: 'Razor', health: 60, state: 'normal' },
-                { x: -0.2, z: 9000, speed: 9500, color: '#FF0055', name: 'Biff', health: 80, state: 'normal' },
-                { x: 0.3, z: 14000, speed: 10500, color: '#9D00FF', name: 'Duke', health: 100, state: 'normal' }
-            ];
-        }
-
-        // --- MATH PROJECTION HELPER ---
-        function project(p, cameraX, cameraY, cameraZ) {
-            p.camera.x = (p.world.x || 0) - cameraX;
-            p.camera.y = (p.world.y || 0) - cameraY;
-            p.camera.z = p.world.z - cameraZ;
-
-            const scale = CAMERA_DEPTH / Math.max(1, p.camera.z);
-            p.screen.x = Math.round((CANVAS_W / 2) + (scale * p.camera.x * CANVAS_W / 2));
-            p.screen.y = Math.round((CANVAS_H / 2) - (scale * p.camera.y * CANVAS_H / 2));
-            p.screen.w = Math.round(scale * ROAD_WIDTH * CANVAS_W / 2);
-        }
-
-        // --- RENDER ROAD POLYGON ---
-        function renderSegment(ctx, width, lanes, x1, y1, w1, x2, y2, w2, color) {
-            // Grass background
-            ctx.fillStyle = color.grass;
-            ctx.fillRect(0, y2, width, y1 - y2);
-
-            // Road surface
-            ctx.fillStyle = color.road;
+            // Draw Horizon Glow Line
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00f0ff';
             ctx.beginPath();
-            ctx.moveTo(x1 - w1, y1);
-            ctx.lineTo(x2 - w2, y2);
-            ctx.lineTo(x2 + w2, y2);
-            ctx.lineTo(x1 + w1, y1);
-            ctx.fill();
+            ctx.moveTo(0, horizon);
+            ctx.lineTo(width, horizon);
+            ctx.stroke();
 
-            // Rumble strips
-            const r1 = w1 / 10;
-            const r2 = w2 / 10;
-            ctx.fillStyle = color.rumble;
-            // Left Rumble
-            ctx.beginPath();
-            ctx.moveTo(x1 - w1 - r1, y1); ctx.lineTo(x2 - w2 - r2, y2);
-            ctx.lineTo(x2 - w2, y2);      ctx.lineTo(x1 - w1, y1);
-            ctx.fill();
-            // Right Rumble
-            ctx.beginPath();
-            ctx.moveTo(x1 + w1 + r1, y1); ctx.lineTo(x2 + w2 + r2, y2);
-            ctx.lineTo(x2 + w2, y2);      ctx.lineTo(x1 + w1, y1);
-            ctx.fill();
+            // Perspective Grid Lines (Verticals tapering to horizon)
+            ctx.strokeStyle = 'rgba(255, 0, 127, 0.5)';
+            ctx.shadowColor = '#ff007f';
+            ctx.shadowBlur = 8;
+            ctx.lineWidth = 1.5;
 
-            // Lane Dividers
-            if (color.lane) {
-                const lineW1 = w1 / 20;
-                const lineW2 = w2 / 20;
-                ctx.fillStyle = color.lane;
+            const numLines = 30;
+            const centerX = width / 2;
+
+            for (let i = -numLines; i <= numLines; i++) {
+                const x = centerX + i * 40;
                 ctx.beginPath();
-                ctx.moveTo(x1 - lineW1, y1); ctx.lineTo(x2 - lineW2, y2);
-                ctx.lineTo(x2 + lineW2, y2); ctx.lineTo(x1 + lineW1, y1);
-                ctx.fill();
-            }
-        }
-
-        // --- MAIN GAME LOOP ---
-        let lastTime = performance.now();
-
-        function gameLoop(now) {
-            const dt = Math.min(1, (now - lastTime) / 1000);
-            lastTime = now;
-
-            if (!isGameOver) {
-                update(dt);
-                render();
-            }
-
-            requestAnimationFrame(gameLoop);
-        }
-
-        // --- UPDATE GAME STATE ---
-        function update(dt) {
-            // Handle Acceleration
-            if (keys.up) {
-                playerSpeed += accel * dt;
-            } else if (keys.down) {
-                playerSpeed -= decel * dt;
-            } else {
-                playerSpeed -= (accel / 2) * dt; // Natural friction
-            }
-
-            playerSpeed = Math.max(0, Math.min(playerSpeed, maxSpeed));
-
-            // Move player along track
-            playerZ += playerSpeed * dt;
-            if (playerZ >= totalTrackLength) playerZ -= totalTrackLength; // Loop circuit
-
-            // Steering & Curvature Effects
-            const currentSegment = segments[Math.floor(playerZ / SEGMENT_LENGTH) % segments.length];
-            const speedRatio = playerSpeed / maxSpeed;
-
-            if (keys.left) playerX -= 1.5 * dt * (0.3 + speedRatio);
-            if (keys.right) playerX += 1.5 * dt * (0.3 + speedRatio);
-
-            // Apply road curvature pull to player
-            playerX -= (currentSegment.curve * 0.4 * speedRatio * dt);
-
-            // Off-road penalty
-            if ((playerX < -1.1 || playerX > 1.1) && playerSpeed > 2000) {
-                playerSpeed -= decel * 0.5 * dt; // Slow down on grass
-            }
-
-            // Keep within bounds
-            playerX = Math.max(-2, Math.min(2, playerX));
-
-            // Attack Handling
-            if (attackCooldown > 0) attackCooldown -= dt;
-            if (attackAnimation > 0) attackAnimation -= dt * 4;
-
-            if (keys.attack && attackCooldown <= 0) {
-                attackCooldown = 0.5;
-                attackAnimation = 1; // Trigger arm swing animation
-                checkMeleeCombat();
-            }
-
-            // Update Rivals Movement
-            rivals.forEach(rival => {
-                rival.z += rival.speed * dt;
-                if (rival.z >= totalTrackLength) rival.z -= totalTrackLength;
-
-                // Simple AI wander
-                if (Math.random() < 0.02) rival.x += (Math.random() - 0.5) * 0.2;
-                rival.x = Math.max(-0.8, Math.min(0.8, rival.x));
-
-                // Rival Attack Player if too close
-                const dz = Math.abs(rival.z - playerZ);
-                const dx = Math.abs(rival.x - playerX);
-                if (dz < 150 && dx < 0.25 && rival.state === 'normal') {
-                    if (Math.random() < 0.03) {
-                        playerHealth -= 8;
-                        createSpark(rival.x, rival.z);
-                        if (playerHealth <= 0) triggerGameOver(false, "Knocked out by " + rival.name + "!");
-                    }
-                }
-            });
-
-            // Update HUD
-            document.getElementById('speed-val').innerText = Math.floor(playerSpeed / 100);
-            document.getElementById('dist-val').innerText = Math.floor(playerZ / 10);
-            const healthBar = document.getElementById('health-bar');
-            healthBar.style.width = Math.max(0, playerHealth) + '%';
-            if (playerHealth < 30) healthBar.style.background = '#f00';
-            else healthBar.style.background = '#0f0';
-        }
-
-        // --- COMBAT SYSTEM ---
-        function checkMeleeCombat() {
-            rivals.forEach(rival => {
-                const dz = Math.abs(rival.z - playerZ);
-                const dx = rival.x - playerX;
-
-                // Check proximity for hit
-                if (dz < 200 && Math.abs(dx) < 0.35) {
-                    rival.health -= 35;
-                    rival.x += (dx > 0 ? 0.3 : -0.3); // Knockback side
-                    rival.speed *= 0.7;               // Slow them down
-
-                    if (rival.health <= 0) {
-                        rival.state = 'wrecked';
-                        rival.speed = 0;
-                    }
-                }
-            });
-        }
-
-        // --- RENDERING ROUTINES ---
-        function render() {
-            ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-
-            // Draw Sky & Horizon Background
-            ctx.fillStyle = '#1a0033';
-            ctx.fillRect(0, 0, CANVAS_W, CANVAS_H / 2);
-            ctx.fillStyle = '#ff5500';
-            ctx.fillRect(0, CANVAS_H / 2 - 40, CANVAS_W, 40); // Sunset band
-
-            const baseSegment = segments[Math.floor(playerZ / SEGMENT_LENGTH) % segments.length];
-            let cameraX = playerX * ROAD_WIDTH;
-            let cameraY = CAMERA_HEIGHT;
-            let cameraZ = playerZ;
-
-            let dx = 0;
-            let x = 0;
-
-            // Draw 3D Pseudo Road from back to front
-            for (let n = 0; n < DRAW_DISTANCE; n++) {
-                const segment = segments[(baseSegment.index + n) % segments.length];
-                
-                // Handle track loop wrapper calculation
-                const segmentLoopedZ = segment.p1.world.z + (segment.index < baseSegment.index ? totalTrackLength : 0);
-
-                project(segment.p1, cameraX - x, cameraY, cameraZ);
-                project(segment.p2, cameraX - x - dx, cameraY, cameraZ);
-
-                x += dx;
-                dx += segment.curve;
-
-                // Ignore segments behind camera
-                if (segment.p1.camera.z <= CAMERA_DEPTH) continue;
-
-                // Draw Segment Road
-                if (segment.p2.screen.y < segment.p1.screen.y) {
-                    renderSegment(
-                        ctx, CANVAS_W, 2,
-                        segment.p1.screen.x, segment.p1.screen.y, segment.p1.screen.w,
-                        segment.p2.screen.x, segment.p2.screen.y, segment.p2.screen.w,
-                        segment.color
-                    );
-                }
-            }
-
-            // Draw Opponents
-            renderRivals(baseSegment.index, cameraX, cameraY, cameraZ);
-
-            // Draw Player Bike
-            renderPlayer();
-        }
-
-        function renderRivals(baseIndex, cameraX, cameraY, cameraZ) {
-            // Sort rivals by distance so furthest render first
-            const sortedRivals = [...rivals].sort((a, b) => b.z - a.z);
-
-            sortedRivals.forEach(rival => {
-                let relativeZ = rival.z - cameraZ;
-                if (relativeZ < 0) relativeZ += totalTrackLength;
-
-                if (relativeZ > 0 && relativeZ < DRAW_DISTANCE * SEGMENT_LENGTH) {
-                    const scale = CAMERA_DEPTH / relativeZ;
-                    const spriteX = (CANVAS_W / 2) + (scale * (rival.x * ROAD_WIDTH - cameraX) * CANVAS_W / 2);
-                    const spriteY = (CANVAS_H / 2) - (scale * -CAMERA_HEIGHT * CANVAS_H / 2);
-                    const spriteSize = Math.max(10, scale * 120000);
-
-                    if (spriteX > -100 && spriteX < CANVAS_W + 100) {
-                        drawBikeSprite(ctx, spriteX, spriteY, spriteSize, rival.color, rival.state === 'wrecked', rival.name);
-                    }
-                }
-            });
-        }
-
-        function renderPlayer() {
-            const playerScreenX = CANVAS_W / 2;
-            const playerScreenY = CANVAS_H - 40;
-            const size = 130;
-
-            ctx.save();
-            ctx.translate(playerScreenX, playerScreenY);
-
-            // Lean bike into steering
-            let lean = 0;
-            if (keys.left) lean = -0.15;
-            if (keys.right) lean = 0.15;
-            ctx.rotate(lean);
-
-            // Bike Body Base
-            ctx.fillStyle = '#111';
-            ctx.fillRect(-size / 4, -size / 2, size / 2, size / 1.5); // Rear tire
-
-            ctx.fillStyle = '#00E5FF'; // Player Bike Color
-            ctx.beginPath();
-            ctx.moveTo(-size / 3, 0);
-            ctx.lineTo(size / 3, 0);
-            ctx.lineTo(size / 4, -size / 2);
-            ctx.lineTo(-size / 4, -size / 2);
-            ctx.fill();
-
-            // Rider Back/Jacket
-            ctx.fillStyle = '#e10600';
-            ctx.fillRect(-size / 3.5, -size / 1.2, size / 1.75, size / 2.5);
-
-            // Helmet
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(0, -size / 1.1, size / 6, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Visor
-            ctx.fillStyle = '#000';
-            ctx.fillRect(-size / 10, -size / 1.05, size / 5, size / 12);
-
-            // Attack Punch/Kick Animation Arm
-            if (attackAnimation > 0) {
-                ctx.fillStyle = '#e10600';
-                ctx.beginPath();
-                ctx.arc(size / 2, -size / 1.2, 12, 0, Math.PI * 2); // Punch fist
-                ctx.fill();
-
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 6;
-                ctx.beginPath();
-                ctx.moveTo(size / 4, -size / 1.3);
-                ctx.lineTo(size / 2, -size / 1.2);
+                ctx.moveTo(centerX + (i * 2), horizon);
+                ctx.lineTo(centerX + (i * 120), height);
                 ctx.stroke();
             }
 
-            ctx.restore();
-        }
+            // Horizontals moving forward (Perspective Depth)
+            gridOffset = (gridOffset + speed) % 40;
 
-        function drawBikeSprite(ctx, x, y, size, color, isWrecked, name) {
-            ctx.save();
-            ctx.translate(x, y);
+            for (let y = horizon; y < height; y += 8) {
+                const dy = y - horizon;
+                const perspectiveY = horizon + Math.pow(dy / (height - horizon), 2) * (height - horizon) + gridOffset;
 
-            if (isWrecked) {
-                // Fallen bike graphics
-                ctx.fillStyle = '#333';
-                ctx.fillRect(-size / 2, -10, size, 15);
-                ctx.fillStyle = '#888';
-                ctx.fillText('💥 WRECK', -20, -20);
-                ctx.restore();
-                return;
+                if (perspectiveY <= height && perspectiveY >= horizon) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, perspectiveY);
+                    ctx.lineTo(width, perspectiveY);
+                    ctx.stroke();
+                }
             }
 
-            // Nameplate above rival
-            ctx.fillStyle = '#fff';
-            ctx.font = '12px Courier';
-            ctx.textAlign = 'center';
-            ctx.fillText(name, 0, -size / 1.2);
-
-            // Bike Rear Tire
-            ctx.fillStyle = '#000';
-            ctx.fillRect(-size / 6, -size / 2, size / 3, size / 2);
-
-            // Bike Chassis
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.moveTo(-size / 4, -size / 4);
-            ctx.lineTo(size / 4, -size / 4);
-            ctx.lineTo(size / 6, -size / 1.5);
-            ctx.lineTo(-size / 6, -size / 1.5);
-            ctx.fill();
-
-            // Rider Head/Helmet
-            ctx.fillStyle = '#222';
-            ctx.beginPath();
-            ctx.arc(0, -size / 1.2, size / 8, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.restore();
+            requestAnimationFrame(drawGrid);
         }
 
-        // --- GAME OVER LOGIC ---
-        function triggerGameOver(win, message) {
-            isGameOver = true;
-            const goScreen = document.getElementById('game-over');
-            const goTitle = document.getElementById('go-title');
-            const goMsg = document.getElementById('go-msg');
-
-            goTitle.innerText = win ? "RACE VICTORY!" : "WASTED!";
-            goTitle.style.color = win ? "#00FF66" : "#FF0033";
-            goMsg.innerText = message;
-            goScreen.style.display = 'flex';
-        }
-
-        function resetGame() {
-            playerX = 0;
-            playerZ = 0;
-            playerSpeed = 0;
-            playerHealth = 100;
-            isGameOver = false;
-            document.getElementById('game-over').style.display = 'none';
-            initRivals();
-        }
-
-        // --- START GAME ---
-        buildRoad();
-        initRivals();
-        requestAnimationFrame(gameLoop);
+        drawGrid();
     </script>
 </body>
 </html>
